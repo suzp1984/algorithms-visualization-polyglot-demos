@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class FxApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Hello world");
+        primaryStage.setTitle("Collision Ball");
 
         Group root = new Group();
         Scene scene = new Scene(root, Color.LIGHTGRAY);
