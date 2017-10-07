@@ -4,11 +4,23 @@ import android.animation.ValueAnimator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.animation.LinearInterpolator;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private ValueAnimator animator;
     private PISimulateView piView;
+    private TextView txtView;
+
+    private PISimulateView.PIObserver piObserver = new PISimulateView.PIObserver() {
+
+        @Override
+        public void update(float pi) {
+            if (txtView != null) {
+                txtView.setText(String.valueOf(pi));
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         piView = (PISimulateView) findViewById(R.id.pi);
+        txtView = (TextView) findViewById(R.id.txt);
+
     }
 
     @Override
@@ -35,12 +49,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         animator.start();
+
+        piView.registerObserver(piObserver);
     }
 
     @Override
     public void onStop() {
         animator.cancel();
         animator = null;
+
+        piView.unregisterObserver(piObserver);
 
         super.onStop();
     }
