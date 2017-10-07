@@ -11,7 +11,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import java.util.Observer;
 
 /**
  * Created by jacobsu on 10/6/17.
