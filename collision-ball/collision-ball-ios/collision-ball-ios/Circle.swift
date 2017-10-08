@@ -14,6 +14,7 @@ struct Circle {
     var r : Int
     var vx : Int
     var vy : Int
+    var isFilled : Bool = false
     
     mutating func move(minx : Int, miny : Int, maxx : Int, maxy : Int) {
         x += vx
@@ -22,8 +23,8 @@ struct Circle {
         checkCollision(minx: minx, miny: miny, maxx: maxx, maxy: maxy)
     }
     
-    func contain(px : Double, py : Double) -> Bool {
-        return ((Double(x) - px) * (Double(x) - px) + (Double(y) - py) * (Double(y) - py)) <= Double(r * r)
+    func contain(px : CFloat, py : CFloat) -> Bool {
+        return ((CFloat(x) - px) * (CFloat(x) - px) + (CFloat(y) - py) * (CFloat(y) - py)) <= CFloat(r * r)
     }
     
     private mutating func checkCollision(minx : Int, miny : Int, maxx : Int, maxy : Int) {

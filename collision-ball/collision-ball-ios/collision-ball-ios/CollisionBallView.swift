@@ -20,12 +20,17 @@ class CollisionBallView: UIView {
         }
         
         ctx.clear(rect)
-        ctx.setFillColor(UIColor.lightGray.cgColor)
+        ctx.setFillColor(UIColor.white.cgColor)
         ctx.fill(rect)
         ctx.setStrokeColor(UIColor.red.cgColor)
+        ctx.setFillColor(UIColor.red.cgColor)
         
         for circle in circles {
-            ctx.strokeEllipse(in: CGRect(x: circle.x - circle.r, y: circle.y - circle.r, width: 2 * circle.r, height: 2 * circle.r))
+            if (circle.isFilled) {
+                ctx.fillEllipse(in: CGRect(x: circle.x - circle.r, y: circle.y - circle.r, width: 2 * circle.r, height: 2 * circle.r))
+            } else {
+                ctx.strokeEllipse(in: CGRect(x: circle.x - circle.r, y: circle.y - circle.r, width: 2 * circle.r, height: 2 * circle.r))
+            }
         }
     }
  
@@ -33,4 +38,6 @@ class CollisionBallView: UIView {
         self.circles = circles
         setNeedsDisplay();
     }
+    
+    
 }

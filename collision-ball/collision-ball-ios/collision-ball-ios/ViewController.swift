@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     let N = 10
     let R = 50
     
+    var isAnimate : Bool = true
+    
     var collisionView : CollisionBallView?
     
     weak var timer : Timer?
@@ -41,29 +43,63 @@ class ViewController: UIViewController {
             let vx = Int(arc4random_uniform(UInt32(11))) - 5
             let vy = Int(arc4random_uniform(11)) - 5
 
-            circles.append(Circle(x: x, y: y, r: R, vx: vx, vy: vy))
+            circles.append(Circle(x: x, y: y, r: R, vx: vx, vy: vy, isFilled : false))
         }
 
-        startTimer()
+        startAnimator()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)));
+        collisionView?.addGestureRecognizer(tap)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            self.run()
+    
+    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    
+        let x = sender.location(in: collisionView).x
+        let y = sender.location(in: collisionView).y
+        
+        let shouldStartAnimation = !self.isAnimate
+        var shouldPause = true
+        
+        for i in 0..<circles.count {
+            if (circles[i].contain(px: CFloat(x), py: CFloat(y))) {
+                print("filled: x, y) = \(x) \(y)")
+                circles[i].isFilled = !circles[i].isFilled
+                shouldPause = false
+            }
+        }
+        
+        if shouldPause && !shouldStartAnimation {
+            isAnimate = false
+        }
+        
+        if shouldStartAnimation {
+            startAnimator()
         }
     }
 
-    func stopTimer() {
-        timer?.invalidate()
+    func startAnimator() {
+        isAnimate = true
+        
+        DispatchQueue.global().async {
+            while (self.isAnimate) {
+                self.run()
+                usleep(40000)
+            }
+        }
+        
+    }
+
+    func stopAnimator() {
+        isAnimate = false
     }
     
     deinit {
-        stopTimer()
+        stopAnimator()
     }
     
     private func run() {
@@ -71,10 +107,9 @@ class ViewController: UIViewController {
             return
         }
         
-        collisionView.render(circles: self.circles)
-//        DispatchQueue.main.async {
-//
-//        }
+        DispatchQueue.main.async {
+            collisionView.render(circles: self.circles)
+        }
     
         for i in 0..<circles.count {
             circles[i].move(minx: 0, miny: 0, maxx: Int(collisionView.frame.width), maxy: Int(collisionView.frame.height))
