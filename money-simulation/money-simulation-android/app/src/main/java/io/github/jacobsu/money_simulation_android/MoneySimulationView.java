@@ -52,7 +52,7 @@ public class MoneySimulationView extends View {
 
         if (moneys != null && moneys.length > 0) {
 
-            int w = getWidth() / (moneys.length - 1);
+            float w = (float) getWidth() / (float) (moneys.length);
 
             for (int i = 0; i < moneys.length; i++) {
                 float left = i * w + 1;
