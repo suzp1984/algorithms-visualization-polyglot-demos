@@ -18,7 +18,7 @@ class MoneySimulationView: UIView {
             return
         }
         
-        ctx.clear(rect)
+//        ctx.clear(rect)
         ctx.setFillColor(UIColor.white.cgColor)
         ctx.fill(rect)
         ctx.setStrokeColor(UIColor.red.cgColor)
